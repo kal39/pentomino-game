@@ -2,7 +2,7 @@ package pentomino.ui;
 
 public class Runner {
 	public static void main(String[] args) {
-		UI ui = new UI(60);
+		UI ui = new UI(50);
 
 		int[][] board = new int[15][5];
 
