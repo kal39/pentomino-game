@@ -53,6 +53,30 @@ public class Board {
 		return true;
 	}
 
+	public boolean perpendicular_collision_left(int length, int width, int xPosition, int yPosition, int[][]shape){
+		for (int r = 0; r < length; r++) {
+			for (int c = 0; c < width; c++) {
+				if (shape[r][c] == 1 && board[yPosition + r][xPosition + c - 1] != 0) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	public boolean perpendicular_collision_right(int length, int width, int xPosition, int yPosition, int[][]shape){
+		for (int r = 0; r < length; r++) {
+			for (int c = 0; c < width; c++) {
+				if (shape[r][c] == 1 && board[yPosition + r][xPosition + c + 1] != 0) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	
+
 	public boolean bottom_check(Block block) {
 		if (block.get_yPos() != board.length - block.get_length()) {
 			return true;

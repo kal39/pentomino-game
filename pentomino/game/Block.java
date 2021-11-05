@@ -30,14 +30,14 @@ public class Block {
 	 * 
 	 */
 
-	public void move_right(){
-		if(xPosition + shape[0].length != boardWidth){
+	public void move_right(Board board){
+		if(xPosition + shape[0].length != boardWidth && board.perpendicular_collision_right(shape.length, shape[0].length, xPosition, yPosition, shape)){
 			xPosition++;
 		}
 	}
 
-	public void move_left(){
-		if(xPosition != 0){
+	public void move_left(Board board){
+		if(xPosition != 0 && board.perpendicular_collision_left(shape.length, shape[0].length, xPosition, yPosition, shape)){
 			xPosition--;
 		}
 	}

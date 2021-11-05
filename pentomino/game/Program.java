@@ -22,11 +22,11 @@ public class Program {
 			while (board.bottom_check(block) && board.collision_check(block)) {
 				//Process keyboard input
 				if(Input.is_left_pressed()){
-					block.move_left();
+					block.move_left(board);
 					ui.set_board(board.get_state(block));
 				}
 				if(Input.is_right_pressed()){
-					block.move_right();
+					block.move_right(board);
 					ui.set_board(board.get_state(block));
 				}
 
