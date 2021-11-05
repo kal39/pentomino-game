@@ -5,7 +5,6 @@ public class Runner {
 		UI ui = new UI(50);
 
 		int[][]  = new int[15][5];
-
 		int i = 0;
 		long prevTime = 0;
 
