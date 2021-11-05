@@ -4,7 +4,7 @@ public class Runner {
 	public static void main(String[] args) {
 		UI ui = new UI(50);
 
-		int[][]  = new int[15][5];
+		int[][] board = new int[15][5];
 		int i = 0;
 		long prevTime = 0;
 
