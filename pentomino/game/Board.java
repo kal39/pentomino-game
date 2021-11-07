@@ -92,6 +92,39 @@ public class Board {
 		}
 		return true;
 	}
+	
+	public void detect_line(){
+		int [] num = new int[20];
+
+		for(int i = board.length-1; i >= 0; i--){
+			boolean check = true;
+			int temp = 0; 
+			for(int j = 0; j < board[0].length; j++){
+				if(board[i][j] == 0){
+					check = false;	
+				}
+			}
+			if(check){
+				for(int j = 0; j < board[0].length; j++){
+					board[i][j] = 0;
+					num[temp] = i; 
+					temp++;
+				}
+				update_clear(num);
+			}
+		}
+	}
+	
+	public void update_clear(int [] num){
+		int temp = 0; 
+		
+		for(int k = num[temp]; k > 0; k--){
+			for(int j = 0; j < board[0].length; j++){
+				board[k][j] = board[k-1][j];
+			}
+			temp++;
+		}
+	}
 
 	/*
 	 * Infrastructure
