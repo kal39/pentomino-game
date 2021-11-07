@@ -29,6 +29,12 @@ public class Program {
 					block.move_right(board);
 					ui.set_board(board.get_state(block));
 				}
+				if(Input.is_drop_pressed()){
+					//Here goes the code for Dropping when SpaceBar is pressed
+				}
+				if(Input.is_rotate_pressed()){
+					//Here goes the code for rotating the pieces
+				}
 
 				long currTime = System.currentTimeMillis();
 				if (currTime - prevTime > 700) {
