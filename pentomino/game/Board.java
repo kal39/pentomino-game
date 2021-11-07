@@ -7,6 +7,10 @@ public class Board {
 		board = new int[20][5];
 	}
 
+	public int[][] get_board(){
+		return board;
+	}
+
 	public int[][] get_state(Block block){
 		int[][] newBoard = ArrayUtils.copy(board);
 		temporarily_update_board(block, newBoard);

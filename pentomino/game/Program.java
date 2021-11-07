@@ -33,7 +33,8 @@ public class Program {
 					//Here goes the code for Dropping when SpaceBar is pressed
 				}
 				if(Input.is_rotate_pressed()){
-					//Here goes the code for rotating the pieces
+					block.rotate(board);
+					ui.set_board(board.get_state(block));
 				}
 
 				long currTime = System.currentTimeMillis();

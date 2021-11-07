@@ -20,8 +20,62 @@ public class Block {
 		yPosition = 5 - shape.length;
 	}
 
-	public void rotate(){
-		//rotate the block here
+	public void rotate(Board board){
+		int oldLength = shape.length;
+		int oldWidth = shape[0].length;
+		int oldX = xPosition;
+		int oldY = yPosition;
+		int[][] boardShape = board.get_board();
+
+		rotationId++;
+		if(rotationId == 4){
+			rotationId = 0;
+		}
+
+		shape = Representations.basicDatabase[blockId - 1][rotationId];
+
+		if(oldLength > shape.length){
+			yPosition += (oldLength - shape.length) / 2;
+		}
+		else if(shape.length > oldLength){
+			yPosition -= (shape.length - oldLength) / 2;
+		}
+
+		if(oldWidth > shape[0].length){
+			xPosition += (oldWidth - shape[0].length) / 2;
+		}
+		else if(shape[0].length > oldWidth){
+			xPosition -= (shape[0].length - oldWidth) / 2;
+		}
+
+		if(xPosition < 0){
+			xPosition += Math.abs(xPosition);
+		}
+		else if(xPosition + (shape[0].length - 1) > 4){
+			xPosition -= (xPosition + (shape[0].length - 1)) - 4;
+		}
+
+		boolean check = false;
+		for(int r = 0; r < shape.length; r ++){
+			for(int c = 0; c < shape[0].length; c++){
+				if(shape[r][c] != 0 && boardShape[r + yPosition][c + xPosition] != 0){
+					check = true;
+				}
+			}
+		}
+
+		if(check){
+			rotationId--;
+			if(rotationId < 0){
+				rotationId = 3;
+			}
+			shape = Representations.basicDatabase[blockId - 1][rotationId];
+			xPosition = oldX;
+			yPosition = oldY;
+		}
+
+
+
 	}
 
 	public void move_down() {
