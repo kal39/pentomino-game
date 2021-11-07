@@ -97,7 +97,9 @@ public class Board {
 		return true;
 	}
 	
-	public void detect_line(){
+	public int deleted_rows;
+	
+	public int detect_line(){
 		int [] num = new int[20];
 
 		for(int i = board.length-1; i >= 0; i--){
@@ -114,9 +116,11 @@ public class Board {
 					num[temp] = i; 
 					temp++;
 				}
+				deleted_rows++;
 				update_clear(num);
 			}
 		}
+		return deleted_rows;
 	}
 	
 	public void update_clear(int [] num){
