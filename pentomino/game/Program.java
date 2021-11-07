@@ -40,6 +40,7 @@ public class Program {
 				if (currTime - prevTime > 700) {
 					//move the block down by one row
 					block.move_down();
+					board.detect_line();
 
 					//display the new state
 					ui.set_board(board.get_state(block));
