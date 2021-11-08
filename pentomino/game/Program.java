@@ -13,11 +13,18 @@ public class Program {
 		Board board = new Board();
 		UI ui = new UI(GRID_SIZE);
 
+		Block nextBlock = new Block();
+		int score = 0;
+
 		// keep the game running as long as the top row isn't filled
 		while (board.game_is_running()) {
 			// create a new pentomino block object and display it
-			Block block = new Block();
+			Block block = nextBlock;
+			nextBlock = new Block();
 			ui.set_board(board.get_state(block));
+
+			ui.set_next_piece(nextBlock.id);
+			ui.set_score(score);
 
 			long prevTime = 0;
 			boolean canFall = true;
@@ -45,7 +52,7 @@ public class Program {
 					}
 				}
 
-				if (currTime - prevTime > (drop ? GAME_SPEED / 50 : GAME_SPEED)) {
+				if (currTime - prevTime > (drop ? GAME_SPEED / 100 : GAME_SPEED)) {
 					// move the block down by one row
 					canFall = block.move_down(board);
 
@@ -57,7 +64,7 @@ public class Program {
 				if (!canFall)
 					drop = false;
 
-				board.detect_line();
+				score += board.detect_line();
 
 			}
 
