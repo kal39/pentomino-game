@@ -20,34 +20,42 @@ public class Program {
 			ui.set_board(board.get_state(block));
 
 			long prevTime = 0;
-			// as long as the block hasn't reached the bottom or collides with other block
-			while (board.bottom_check(block) && board.collision_check(block)) {
+			boolean canFall = true;
+			boolean drop = false;
+
+			while (canFall) {
+				long currTime = System.currentTimeMillis();
+
 				// Process keyboard input
-				if (Input.is_left_pressed()) {
-					block.move_left(board);
-					ui.set_board(board.get_state(block));
-				}
-				if (Input.is_right_pressed()) {
-					block.move_right(board);
-					ui.set_board(board.get_state(block));
-				}
-				if (Input.is_drop_pressed()) {
-					// TODO: drop
-				}
-				if (Input.is_rotate_pressed()) {
-					block.rotate(board);
-					ui.set_board(board.get_state(block));
+				if (!drop) {
+					if (Input.is_left_pressed()) {
+						block.move_left(board);
+						ui.set_board(board.get_state(block));
+					}
+					if (Input.is_right_pressed()) {
+						block.move_right(board);
+						ui.set_board(board.get_state(block));
+					}
+					if (Input.is_drop_pressed()) {
+						drop = true;
+					}
+					if (Input.is_rotate_pressed()) {
+						block.rotate(board);
+						ui.set_board(board.get_state(block));
+					}
 				}
 
-				long currTime = System.currentTimeMillis();
-				if (currTime - prevTime > GAME_SPEED) {
+				if (currTime - prevTime > (drop ? GAME_SPEED / 50 : GAME_SPEED)) {
 					// move the block down by one row
-					block.move_down();
+					canFall = block.move_down(board);
 
 					// display the new state
 					ui.set_board(board.get_state(block));
 					prevTime = currTime;
 				}
+
+				if (!canFall)
+					drop = false;
 
 				board.detect_line();
 

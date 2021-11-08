@@ -44,6 +44,13 @@ public class Board {
 		}
 	}
 
+	public boolean bottom_check(Block block) {
+		if (block.get_yPos() != board.length - block.get_length()) {
+			return true;
+		}
+		return false;
+	}
+
 	public boolean collision_check(Block block) {
 		for (int r = 0; r < block.get_length(); r++) {
 			for (int c = 0; c < block.get_width(); c++) {
@@ -55,33 +62,24 @@ public class Board {
 		return true;
 	}
 
-	public boolean perpendicular_collision_left(int length, int width, int xPosition, int yPosition, int[][] shape) {
-		for (int r = 0; r < length; r++) {
-			for (int c = 0; c < width; c++) {
-				if (shape[r][c] == 1 && board[yPosition + r][xPosition + c - 1] != 0) {
+	public boolean perpendicular_collision_left(Block block) {
+		for (int r = 0; r < block.shape.length; r++) {
+			for (int c = 0; c < block.shape[0].length; c++) {
+				if (block.shape[r][c] == 1 && board[block.y + r][block.x + c - 1] != 0)
 					return false;
-				}
 			}
 		}
 		return true;
 	}
 
-	public boolean perpendicular_collision_right(int length, int width, int xPosition, int yPosition, int[][] shape) {
-		for (int r = 0; r < length; r++) {
-			for (int c = 0; c < width; c++) {
-				if (shape[r][c] == 1 && board[yPosition + r][xPosition + c + 1] != 0) {
+	public boolean perpendicular_collision_right(Block block) {
+		for (int r = 0; r < block.shape.length; r++) {
+			for (int c = 0; c < block.shape[0].length; c++) {
+				if (block.shape[r][c] == 1 && board[block.y + r][block.x + c + 1] != 0)
 					return false;
-				}
 			}
 		}
 		return true;
-	}
-
-	public boolean bottom_check(Block block) {
-		if (block.get_yPos() != board.length - block.get_length()) {
-			return true;
-		}
-		return false;
 	}
 
 	public boolean game_is_running() {

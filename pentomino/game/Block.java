@@ -6,8 +6,8 @@ import pentomino.Representations;
 public class Block {
 	int[][] shape;
 	int id;
-	int xPosition;
-	int yPosition;
+	int x;
+	int y;
 	private static int boardWidth = 5;
 
 	public Block() {
@@ -21,41 +21,40 @@ public class Block {
 			ArrayUtils.rotate(shape);
 		}
 
-		xPosition = ((5 - shape[0].length) / 2);
-		yPosition = 5 - shape.length;
+		x = ((5 - shape[0].length) / 2);
+		y = 5 - shape.length;
 	}
 
 	public void rotate(Board board) {
 		int oldLength = shape.length;
 		int oldWidth = shape[0].length;
-		int oldX = xPosition;
-		int oldY = yPosition;
+		int oldX = x;
+		int oldY = y;
 
-		// shape = Representations.basicDatabase[id - 1][rotation];
 		shape = ArrayUtils.rotate(shape);
 
 		if (oldLength > shape.length) {
-			yPosition += (oldLength - shape.length) / 2;
+			y += (oldLength - shape.length) / 2;
 		} else if (shape.length > oldLength) {
-			yPosition -= (shape.length - oldLength) / 2;
+			y -= (shape.length - oldLength) / 2;
 		}
 
 		if (oldWidth > shape[0].length) {
-			xPosition += (oldWidth - shape[0].length) / 2;
+			x += (oldWidth - shape[0].length) / 2;
 		} else if (shape[0].length > oldWidth) {
-			xPosition -= (shape[0].length - oldWidth) / 2;
+			x -= (shape[0].length - oldWidth) / 2;
 		}
 
-		if (xPosition < 0) {
-			xPosition += Math.abs(xPosition);
-		} else if (xPosition + (shape[0].length - 1) > 4) {
-			xPosition -= (xPosition + (shape[0].length - 1)) - 4;
+		if (x < 0) {
+			x += Math.abs(x);
+		} else if (x + (shape[0].length - 1) > 4) {
+			x -= (x + (shape[0].length - 1)) - 4;
 		}
 
 		boolean check = false;
 		for (int r = 0; r < shape.length; r++) {
 			for (int c = 0; c < shape[0].length; c++) {
-				if (shape[r][c] != 0 && board.get_board()[r + yPosition][c + xPosition] != 0) {
+				if (shape[r][c] != 0 && board.get_board()[r + y][c + x] != 0) {
 					check = true;
 				}
 			}
@@ -65,29 +64,29 @@ public class Block {
 			for (int i = 0; i < 3; i++) {
 				shape = ArrayUtils.rotate(shape);
 			}
-			xPosition = oldX;
-			yPosition = oldY;
+			x = oldX;
+			y = oldY;
 		}
 
 	}
 
-	// TODO: add collision check here
-	public void move_down() {
-		yPosition++;
+	public boolean move_down(Board board) {
+		if (board.bottom_check(this) && board.collision_check(this)) {
+			y++;
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public void move_right(Board board) {
-		if (xPosition + shape[0].length != boardWidth
-				&& board.perpendicular_collision_right(shape.length, shape[0].length, xPosition, yPosition, shape)) {
-			xPosition++;
-		}
+		if (x + shape[0].length != boardWidth && board.perpendicular_collision_right(this))
+			x++;
 	}
 
 	public void move_left(Board board) {
-		if (xPosition != 0
-				&& board.perpendicular_collision_left(shape.length, shape[0].length, xPosition, yPosition, shape)) {
-			xPosition--;
-		}
+		if (x != 0 && board.perpendicular_collision_left(this))
+			x--;
 	}
 
 	public int[][] get_shape() {
@@ -99,11 +98,11 @@ public class Block {
 	}
 
 	public int get_xPos() {
-		return xPosition;
+		return x;
 	}
 
 	public int get_yPos() {
-		return yPosition;
+		return y;
 	}
 
 	public int get_length() {
