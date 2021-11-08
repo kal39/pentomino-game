@@ -1,6 +1,6 @@
-package pentomino.ui;
+package pentomino;
 
-public class Pentomino {
+public class Representations {
 	static int[][][] shapes = { //
 			{ { 0, 1, 0 }, { 1, 1, 1 }, { 0, 1, 0 } }, // X
 			{ { 1 }, { 1 }, { 1 }, { 1 }, { 1 } }, // I

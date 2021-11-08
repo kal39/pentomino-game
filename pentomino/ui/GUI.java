@@ -2,6 +2,8 @@ package pentomino.ui;
 
 import java.awt.*;
 
+import pentomino.Representations;
+
 public class GUI extends Canvas {
 	int cellSize;
 	float fontRatio = 0.4f;
@@ -92,7 +94,7 @@ public class GUI extends Canvas {
 		yOff += fontSize + textPadding;
 
 		int pentominoOffset = (cellSize * 3 - (cellSize / 2) * 3) / 2;
-		draw_2d_array(g, Pentomino.get_shape(nextPiece), cellSize * 7 + pentominoOffset, yOff, cellSize / 2,
+		draw_2d_array(g, Representations.get_shape(nextPiece), cellSize * 7 + pentominoOffset, yOff, cellSize / 2,
 				get_pentomino_color(nextPiece));
 
 	}

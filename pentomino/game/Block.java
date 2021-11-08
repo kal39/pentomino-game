@@ -1,20 +1,26 @@
 package pentomino.game;
 
 import java.util.Random;
+import pentomino.Representations;
 
 public class Block {
 	int[][] shape;
-	int blockId;
+	int id;
 	int xPosition;
 	int yPosition;
-	int rotationId;
 	private static int boardWidth = 5;
 
 	public Block() {
 		Random rand = new Random();
-		rotationId = rand.nextInt(4);
-		blockId = rand.nextInt(12) + 1;
-		shape = Representations.basicDatabase[blockId - 1][rotationId];
+
+		id = rand.nextInt(12);
+		shape = Representations.get_shape(id);
+
+		int rotation = rand.nextInt(4);
+		for (int i = 0; i < rotation; i++) {
+			ArrayUtils.rotate(shape);
+		}
+
 		xPosition = ((5 - shape[0].length) / 2);
 		yPosition = 5 - shape.length;
 	}
@@ -24,14 +30,9 @@ public class Block {
 		int oldWidth = shape[0].length;
 		int oldX = xPosition;
 		int oldY = yPosition;
-		int[][] boardShape = board.get_board();
 
-		rotationId++;
-		if (rotationId == 4) {
-			rotationId = 0;
-		}
-
-		shape = Representations.basicDatabase[blockId - 1][rotationId];
+		// shape = Representations.basicDatabase[id - 1][rotation];
+		shape = ArrayUtils.rotate(shape);
 
 		if (oldLength > shape.length) {
 			yPosition += (oldLength - shape.length) / 2;
@@ -54,18 +55,16 @@ public class Block {
 		boolean check = false;
 		for (int r = 0; r < shape.length; r++) {
 			for (int c = 0; c < shape[0].length; c++) {
-				if (shape[r][c] != 0 && boardShape[r + yPosition][c + xPosition] != 0) {
+				if (shape[r][c] != 0 && board.get_board()[r + yPosition][c + xPosition] != 0) {
 					check = true;
 				}
 			}
 		}
 
 		if (check) {
-			rotationId--;
-			if (rotationId < 0) {
-				rotationId = 3;
+			for (int i = 0; i < 3; i++) {
+				shape = ArrayUtils.rotate(shape);
 			}
-			shape = Representations.basicDatabase[blockId - 1][rotationId];
 			xPosition = oldX;
 			yPosition = oldY;
 		}
@@ -95,8 +94,8 @@ public class Block {
 		return shape;
 	}
 
-	public int get_blockId() {
-		return blockId;
+	public int get_id() {
+		return id;
 	}
 
 	public int get_xPos() {

@@ -28,7 +28,7 @@ public class Board {
 		for (int i = 0; i < block.get_length(); i++) {
 			for (int j = 0; j < block.get_width(); j++) {
 				if (block.get_shape()[i][j] == 1) {
-					matrix[block.get_yPos() + i][block.get_xPos() + j] = block.get_blockId();
+					matrix[block.get_yPos() + i][block.get_xPos() + j] = block.get_id();
 				}
 			}
 		}
@@ -38,7 +38,7 @@ public class Board {
 		for (int i = 0; i < block.get_length(); i++) {
 			for (int j = 0; j < block.get_width(); j++) {
 				if (block.get_shape()[i][j] == 1) {
-					board[block.get_yPos() + i][block.get_xPos() + j] = block.get_blockId();
+					board[block.get_yPos() + i][block.get_xPos() + j] = block.get_id();
 				}
 			}
 		}
