@@ -7,17 +7,17 @@ public class Board {
 		board = new int[20][5];
 	}
 
-	public int[][] get_board(){
+	public int[][] get_board() {
 		return board;
 	}
 
-	public int[][] get_state(Block block){
+	public int[][] get_state(Block block) {
 		int[][] newBoard = ArrayUtils.copy(board);
 		temporarily_update_board(block, newBoard);
 		int[][] returnBoard = new int[15][5];
 
-		for(int r = 0; r < returnBoard.length; r++){
-			for(int c = 0; c < returnBoard[0].length; c++){
+		for (int r = 0; r < returnBoard.length; r++) {
+			for (int c = 0; c < returnBoard[0].length; c++) {
 				returnBoard[r][c] = newBoard[r + 5][c];
 			}
 		}
@@ -30,7 +30,6 @@ public class Board {
 				if (block.get_shape()[i][j] == 1) {
 					matrix[block.get_yPos() + i][block.get_xPos() + j] = block.get_blockId();
 				}
-
 			}
 		}
 	}
@@ -41,7 +40,6 @@ public class Board {
 				if (block.get_shape()[i][j] == 1) {
 					board[block.get_yPos() + i][block.get_xPos() + j] = block.get_blockId();
 				}
-
 			}
 		}
 	}
@@ -57,7 +55,7 @@ public class Board {
 		return true;
 	}
 
-	public boolean perpendicular_collision_left(int length, int width, int xPosition, int yPosition, int[][]shape){
+	public boolean perpendicular_collision_left(int length, int width, int xPosition, int yPosition, int[][] shape) {
 		for (int r = 0; r < length; r++) {
 			for (int c = 0; c < width; c++) {
 				if (shape[r][c] == 1 && board[yPosition + r][xPosition + c - 1] != 0) {
@@ -68,7 +66,7 @@ public class Board {
 		return true;
 	}
 
-	public boolean perpendicular_collision_right(int length, int width, int xPosition, int yPosition, int[][]shape){
+	public boolean perpendicular_collision_right(int length, int width, int xPosition, int yPosition, int[][] shape) {
 		for (int r = 0; r < length; r++) {
 			for (int c = 0; c < width; c++) {
 				if (shape[r][c] == 1 && board[yPosition + r][xPosition + c + 1] != 0) {
@@ -78,8 +76,6 @@ public class Board {
 		}
 		return true;
 	}
-
-	
 
 	public boolean bottom_check(Block block) {
 		if (block.get_yPos() != board.length - block.get_length()) {
@@ -96,54 +92,37 @@ public class Board {
 		}
 		return true;
 	}
-	
-	public void detect_line(){
-		int [] num = new int[20];
 
-		for(int i = board.length-1; i >= 0; i--){
+	public void detect_line() {
+		int[] num = new int[20];
+
+		for (int i = board.length - 1; i >= 0; i--) {
 			boolean check = true;
-			int temp = 0; 
-			for(int j = 0; j < board[0].length; j++){
-				if(board[i][j] == 0){
-					check = false;	
+			int temp = 0;
+			for (int j = 0; j < board[0].length; j++) {
+				if (board[i][j] == 0) {
+					check = false;
 				}
 			}
-			if(check){
-				for(int j = 0; j < board[0].length; j++){
+			if (check) {
+				for (int j = 0; j < board[0].length; j++) {
 					board[i][j] = 0;
-					num[temp] = i; 
+					num[temp] = i;
 					temp++;
 				}
 				update_clear(num);
 			}
 		}
 	}
-	
-	public void update_clear(int [] num){
-		int temp = 0; 
-		
-		for(int k = num[temp]; k > 0; k--){
-			for(int j = 0; j < board[0].length; j++){
-				board[k][j] = board[k-1][j];
+
+	public void update_clear(int[] num) {
+		int temp = 0;
+
+		for (int k = num[temp]; k > 0; k--) {
+			for (int j = 0; j < board[0].length; j++) {
+				board[k][j] = board[k - 1][j];
 			}
 			temp++;
 		}
 	}
-
-	/*
-	 * Infrastructure
-	 * 
-	 * private int[] rows_to_delete(){ int[] rows = new int[0]; for(int r = 0; r <
-	 * board.length; r++){ boolean check = true; for(int c = 0; c < board[0].length;
-	 * c++){ if(board[r][c] == 0){ check = false; } } if(check == true){ rows =
-	 * ArrayUtils.add_element(rows, r); } } return rows; }
-	 * 
-	 * public int delete_full_rows(){ int[] rows = rows_to_delete();
-	 * 
-	 * if(rows.length > 0){ board = ArrayUtils.remove_row(board, rows); int[][]
-	 * refill = new int[rows.length][5]; board = ArrayUtils.add(refill, board); }
-	 * 
-	 * return rows.length; }
-	 */
-
 }
