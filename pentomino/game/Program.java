@@ -9,10 +9,34 @@ public class Program {
 
 	public static void main(String[] args) {
 
-		// create a new board object and UI
-		Board board = new Board();
 		UI ui = new UI(GRID_SIZE);
 
+		while(true){
+
+			/*
+			 *
+			 * DISPLAY START SCREEN HERE
+			 * 
+			 */
+
+			//if(human_game_selected){
+			human_game(ui);
+			//}
+
+			//else if(bot_game_selected){
+			//	bot_game(ui);
+			//}
+
+			/*
+			 *
+			 * DISPLAY GAME OVER SCREEN HERE
+			 * 
+			 */
+		}
+	}
+
+	private static void human_game(UI ui){
+		Board board = new Board();
 		Block nextBlock = new Block();
 		int score = 0;
 
@@ -62,8 +86,9 @@ public class Program {
 					prevTime = currTime;
 				}
 
-				if (!canFall)
+				if (!canFall){
 					drop = false;
+				}
 
 				score += board.detect_line();
 
@@ -74,4 +99,5 @@ public class Program {
 			block = null;
 		}
 	}
+
 }
