@@ -28,12 +28,19 @@ public class UI {
 	}
 
 	/**
+	 * Redraw the gui. Any changes won't take affect until this is called
+	 */
+
+	public void redraw() {
+		gui.repaint();
+	}
+
+	/**
 	 * Make the gui show the title
 	 */
 
 	public void set_title() {
 		gui.set_title();
-		gui.repaint();
 	}
 
 	/**
@@ -42,7 +49,6 @@ public class UI {
 
 	public void set_game() {
 		gui.set_game();
-		gui.repaint();
 	}
 
 	/**
@@ -51,7 +57,6 @@ public class UI {
 
 	public void set_loose() {
 		gui.set_loose();
-		gui.repaint();
 	}
 
 	/**
@@ -62,7 +67,6 @@ public class UI {
 
 	public void set_board(int[][] newBoard) {
 		gui.set_board(newBoard);
-		gui.repaint();
 	}
 
 	/**
@@ -73,7 +77,6 @@ public class UI {
 
 	public void set_cell_size(int size) {
 		gui.set_cell_size(size);
-		gui.repaint();
 	}
 
 	/**
@@ -84,7 +87,6 @@ public class UI {
 
 	public void set_score(int newScore) {
 		gui.set_score(newScore);
-		gui.repaint();
 	}
 
 	/**
@@ -95,7 +97,6 @@ public class UI {
 
 	public void set_high_score(int newHighScore) {
 		gui.set_high_score(newHighScore);
-		gui.repaint();
 	}
 
 	/**
@@ -106,6 +107,5 @@ public class UI {
 
 	public void set_next_piece(int newNextPiece) {
 		gui.set_next_piece(newNextPiece);
-		gui.repaint();
 	}
 }

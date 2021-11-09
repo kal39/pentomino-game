@@ -21,6 +21,7 @@ public class Program {
 
 			while (true) {
 				ui.set_title();
+				ui.redraw();
 				if (Input.is_rotate_pressed()) {
 					ui.set_game();
 					human_game(ui);
@@ -35,6 +36,7 @@ public class Program {
 			 */
 			while (true) {
 				ui.set_loose();
+				ui.redraw();
 				if (Input.is_rotate_pressed()) {
 					break;
 				}
@@ -95,6 +97,7 @@ public class Program {
 				ui.set_board(board.get_state(block));
 				ui.set_next_piece(nextBlock.id);
 				ui.set_score(score);
+				ui.redraw();
 
 			}
 
