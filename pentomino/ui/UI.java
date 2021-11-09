@@ -28,6 +28,33 @@ public class UI {
 	}
 
 	/**
+	 * Make the gui show the title
+	 */
+
+	public void set_title() {
+		gui.set_title();
+		gui.repaint();
+	}
+
+	/**
+	 * Make the gui run the game
+	 */
+
+	public void set_game() {
+		gui.set_game();
+		gui.repaint();
+	}
+
+	/**
+	 * Make the gui show the game over screen
+	 */
+
+	public void set_loose() {
+		gui.set_loose();
+		gui.repaint();
+	}
+
+	/**
 	 * Set the contents of the board to be drawn
 	 * 
 	 * @param newBoard the new board (size: 5x15)

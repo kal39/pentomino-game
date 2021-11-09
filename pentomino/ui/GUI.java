@@ -14,6 +14,8 @@ public class GUI extends Canvas {
 	int highScore;
 	int nextPiece;
 
+	int mode = 0;
+
 	public void set_board(int[][] newBoard) {
 		board = copy_board(newBoard);
 	}
@@ -34,24 +36,122 @@ public class GUI extends Canvas {
 		nextPiece = newNextPiece;
 	}
 
+	public void set_title() {
+		mode = 0;
+	}
+
+	public void set_game() {
+		mode = 1;
+	}
+
+	public void set_loose() {
+		mode = 2;
+	}
+
 	public void update(Graphics G) {
 		Image buffer = createImage(cellSize * (5 + 2 + 4), cellSize * (15 + 2));
 		Graphics g = buffer.getGraphics();
 
-		draw_background(g);
-		draw_border(g);
-		draw_board(g);
-		draw_info(g);
+		switch (mode) {
+		case 0:
+			draw_title(g);
+			break;
+		case 1:
+			draw_background(g);
+			draw_border(g);
+			draw_board(g);
+			draw_info(g);
+			break;
+
+		case 2:
+			draw_loose(g);
+			break;
+		}
 
 		G.drawImage(buffer, 0, 0, null);
 	}
 
-	void draw_background(Graphics g) {
+	private void draw_title(Graphics g) {
+		draw_background(g);
+
+		for (int i = 0; i < board.length + 2; i++) {
+			for (int j = 0; j < board[0].length + 2 + 4; j++) {
+				if (i == 0 || j == 0 || i == board.length + 1 || j == board[0].length + 5)
+					draw_cell(g, j, i, -1); // negative represents a border cell
+			}
+		}
+
+		int fontSize = (int) (fontRatio * cellSize);
+
+		Font titleFont = new Font("Monospace", Font.BOLD, fontSize * 2);
+		Font optionsFont = new Font("Monospace", Font.BOLD, fontSize * 3 / 4);
+
+		g.setFont(titleFont);
+		FontMetrics m = g.getFontMetrics(titleFont);
+
+		int centerX = ((board[0].length + 5 + 1) * cellSize) / 2;
+		int centerY = ((board.length + 2 + 1) * cellSize) / 2;
+
+		String title = "Title goes here";
+		g.setColor(Color.white);
+		g.drawString(title, centerX - m.stringWidth(title) / 2, centerY / 2);
+
+		g.setFont(optionsFont);
+		m = g.getFontMetrics(optionsFont);
+
+		String options1 = "Press [UP] to play";
+		g.drawString(options1, centerX - m.stringWidth(options1) / 2, centerY);
+
+		String options2 = "Press [LEFT] for bot 1 | Press [RIGHT] for bot 2";
+		g.drawString(options2, centerX - m.stringWidth(options2) / 2, centerY + fontSize * 2);
+
+		String options3 = "Press [DOWN] to quit";
+		g.drawString(options3, centerX - m.stringWidth(options3) / 2, centerY + fontSize * 4);
+
+	}
+
+	private void draw_loose(Graphics g) {
+		draw_background(g);
+
+		for (int i = 0; i < board.length + 2; i++) {
+			for (int j = 0; j < board[0].length + 2 + 4; j++) {
+				if (i == 0 || j == 0 || i == board.length + 1 || j == board[0].length + 5)
+					draw_cell(g, j, i, -1); // negative represents a border cell
+			}
+		}
+
+		int fontSize = (int) (fontRatio * cellSize);
+
+		Font scoreFont = new Font("Monospace", Font.BOLD, fontSize * 2);
+		Font optionsFont = new Font("Monospace", Font.BOLD, fontSize * 3 / 4);
+
+		g.setFont(scoreFont);
+		FontMetrics m = g.getFontMetrics(scoreFont);
+
+		int centerX = ((board[0].length + 5 + 1) * cellSize) / 2;
+		int centerY = ((board.length + 2 + 1) * cellSize) / 2;
+
+		String scoreString = "Score: " + score;
+		g.setColor(Color.white);
+		g.drawString(scoreString, centerX - m.stringWidth(scoreString) / 2, centerY / 2);
+
+		g.setFont(optionsFont);
+		m = g.getFontMetrics(optionsFont);
+
+		String options1 = "Press [UP] to play again";
+		g.drawString(options1, centerX - m.stringWidth(options1) / 2, centerY);
+
+		String options2 = "Press [DOWN] to show leaderboard";
+		g.drawString(options2, centerX - m.stringWidth(options2) / 2, centerY + fontSize * 2);
+
+	}
+
+	private void draw_background(Graphics g) {
 		g.setColor(Color.black);
 		g.fillRect(0, 0, cellSize * (5 + 2 + 4), cellSize * (15 + 2));
 	}
 
-	void draw_border(Graphics g) {
+	private void draw_border(Graphics g) {
 		for (int i = 0; i < board.length + 2; i++) {
 			for (int j = 0; j < board[0].length + 2 + 4; j++) {
 				if (i == 0 || j == 0 || i == board.length + 1 || j == board[0].length + 1 || j == board[0].length + 5)
@@ -60,7 +160,7 @@ public class GUI extends Canvas {
 		}
 	}
 
-	void draw_board(Graphics g) {
+	private void draw_board(Graphics g) {
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[0].length; j++) {
 				draw_cell(g, j + 1, i + 1, board[i][j]); // the color of the cell depends on the pentomino type
@@ -68,7 +168,7 @@ public class GUI extends Canvas {
 		}
 	}
 
-	void draw_info(Graphics g) {
+	private void draw_info(Graphics g) {
 		int fontSize = (int) (fontRatio * cellSize);
 		g.setFont(new Font("Monospace", Font.PLAIN, fontSize));
 
@@ -99,7 +199,7 @@ public class GUI extends Canvas {
 
 	}
 
-	void draw_2d_array(Graphics g, int[][] array, int x, int y, int cellSize, Color color) {
+	private void draw_2d_array(Graphics g, int[][] array, int x, int y, int cellSize, Color color) {
 		for (int i = 0; i < array.length; i++) {
 			for (int j = 0; j < array[0].length; j++) {
 				if (array[i][j] == 1)
@@ -108,14 +208,14 @@ public class GUI extends Canvas {
 		}
 	}
 
-	void draw_cell(Graphics g, int x, int y, int piece) {
+	private void draw_cell(Graphics g, int x, int y, int piece) {
 		if (piece == 0)
 			return; // empty cell
 
 		draw_3d_square(g, x * cellSize, y * cellSize, cellSize, get_pentomino_color(piece));
 	}
 
-	Color get_pentomino_color(int pentomino) {
+	private Color get_pentomino_color(int pentomino) {
 		switch (pentomino) {
 		case 1:
 			return Color.red;
@@ -146,7 +246,7 @@ public class GUI extends Canvas {
 		}
 	}
 
-	void draw_3d_square(Graphics g, int x, int y, int size, Color color) {
+	private void draw_3d_square(Graphics g, int x, int y, int size, Color color) {
 		int contrast = 50;
 		int borderSize = size / 5;
 
@@ -166,7 +266,7 @@ public class GUI extends Canvas {
 		g.fillRect(x + borderSize, y + borderSize, size - borderSize * 2, size - borderSize * 2);
 	}
 
-	void draw_triangle(Graphics g, int x1, int y1, int x2, int y2, int x3, int y3) {
+	private void draw_triangle(Graphics g, int x1, int y1, int x2, int y2, int x3, int y3) {
 		Polygon p = new Polygon();
 		p.addPoint(x1, y1);
 		p.addPoint(x2, y2);
@@ -175,17 +275,17 @@ public class GUI extends Canvas {
 		g.fillPolygon(p);
 	}
 
-	Color lighten_color(Color color, int magnitude) {
+	private Color lighten_color(Color color, int magnitude) {
 		return new Color(Math.min(color.getRed() + magnitude, 255), Math.min(color.getGreen() + magnitude, 255),
 				Math.min(color.getBlue() + magnitude, 255));
 	}
 
-	Color darken_color(Color color, int magnitude) {
+	private Color darken_color(Color color, int magnitude) {
 		return new Color(Math.max(color.getRed() - magnitude, 0), Math.max(color.getGreen() - magnitude, 0),
 				Math.max(color.getBlue() - magnitude, 0));
 	}
 
-	int[][] copy_board(int[][] in) {
+	private int[][] copy_board(int[][] in) {
 		int[][] out = new int[in.length][in[0].length];
 
 		for (int i = 0; i < in.length; i++) {

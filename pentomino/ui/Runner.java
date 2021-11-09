@@ -8,6 +8,8 @@ public class Runner {
 		int i = 0;
 		long prevTime = 0;
 
+		ui.set_loose();
+
 		while (true) {
 			long currTime = System.currentTimeMillis();
 
