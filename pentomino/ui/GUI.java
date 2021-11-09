@@ -92,7 +92,7 @@ public class GUI extends Canvas {
 		int centerX = ((board[0].length + 5 + 1) * cellSize) / 2;
 		int centerY = ((board.length + 2 + 1) * cellSize) / 2;
 
-		String title = "Title goes here";
+		String title = "PENTOMINO TETRIS";
 		g.setColor(Color.white);
 		g.drawString(title, centerX - m.stringWidth(title) / 2, centerY / 2);
 

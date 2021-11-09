@@ -11,7 +11,7 @@ public class Program {
 
 		UI ui = new UI(GRID_SIZE);
 
-		while(true){
+		while (true) {
 
 			/*
 			 *
@@ -19,10 +19,9 @@ public class Program {
 			 * 
 			 */
 
-
-			while(true){
+			while (true) {
 				ui.set_title();
-				if(Input.is_rotate_pressed()){
+				if (Input.is_rotate_pressed()) {
 					ui.set_game();
 					human_game(ui);
 					break;
@@ -34,16 +33,16 @@ public class Program {
 			 * DISPLAY GAME OVER SCREEN HERE
 			 * 
 			 */
-			while(true){
+			while (true) {
 				ui.set_loose();
-				if(Input.is_rotate_pressed()){
+				if (Input.is_rotate_pressed()) {
 					break;
 				}
 			}
 		}
 	}
 
-	private static void human_game(UI ui){
+	private static void human_game(UI ui) {
 		Board board = new Board();
 		Block nextBlock = new Block();
 		int score = 0;
@@ -54,10 +53,6 @@ public class Program {
 			// create a new pentomino block object and display it
 			Block block = nextBlock;
 			nextBlock = new Block();
-			ui.set_board(board.get_state(block));
-
-			ui.set_next_piece(nextBlock.id);
-			ui.set_score(score);
 
 			long prevTime = 0;
 			boolean canFall = true;
@@ -70,18 +65,15 @@ public class Program {
 				if (!drop) {
 					if (Input.is_left_pressed()) {
 						block.move_left(board);
-						ui.set_board(board.get_state(block));
 					}
 					if (Input.is_right_pressed()) {
 						block.move_right(board);
-						ui.set_board(board.get_state(block));
 					}
 					if (Input.is_drop_pressed()) {
 						drop = true;
 					}
 					if (Input.is_rotate_pressed()) {
 						block.rotate(board);
-						ui.set_board(board.get_state(block));
 					}
 				}
 
@@ -94,11 +86,15 @@ public class Program {
 					prevTime = currTime;
 				}
 
-				if (!canFall){
+				if (!canFall) {
 					drop = false;
 				}
 
 				score += board.detect_line();
+
+				ui.set_board(board.get_state(block));
+				ui.set_next_piece(nextBlock.id);
+				ui.set_score(score);
 
 			}
 
