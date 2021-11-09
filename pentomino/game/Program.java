@@ -18,6 +18,7 @@ public class Program {
 
 		// keep the game running as long as the top row isn't filled
 		while (board.game_is_running()) {
+
 			// create a new pentomino block object and display it
 			Block block = nextBlock;
 			nextBlock = new Block();

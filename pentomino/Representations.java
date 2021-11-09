@@ -17,6 +17,6 @@ public class Representations {
 	};
 
 	public static int[][] get_shape(int id) {
-		return shapes[id];
+		return shapes[id - 1];
 	}
 }

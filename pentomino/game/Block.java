@@ -13,7 +13,7 @@ public class Block {
 	public Block() {
 		Random rand = new Random();
 
-		id = rand.nextInt(12);
+		id = rand.nextInt(12) + 1;
 		shape = Representations.get_shape(id);
 
 		int rotation = rand.nextInt(4);
