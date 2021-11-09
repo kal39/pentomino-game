@@ -84,7 +84,7 @@ public class Board {
 
 	public boolean game_is_running() {
 		for (int i = 0; i < board[0].length; i++) {
-			if (board[5][i] != 0) {
+			if (board[4][i] != 0) {
 				return false;
 			}
 		}
