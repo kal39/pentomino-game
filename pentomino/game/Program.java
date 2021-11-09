@@ -19,11 +19,10 @@ public class Program {
 			 * 
 			 */
 
-			ui.set_title();
 
 			while(true){
+				ui.set_title();
 				if(Input.is_rotate_pressed()){
-					System.out.println("presssed");
 					ui.set_game();
 					human_game(ui);
 					break;
@@ -35,7 +34,12 @@ public class Program {
 			 * DISPLAY GAME OVER SCREEN HERE
 			 * 
 			 */
-			ui.set_loose();
+			while(true){
+				ui.set_loose();
+				if(Input.is_rotate_pressed()){
+					break;
+				}
+			}
 		}
 	}
 
