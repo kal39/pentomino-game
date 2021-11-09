@@ -19,19 +19,23 @@ public class Program {
 			 * 
 			 */
 
-			//if(human_game_selected){
-			human_game(ui);
-			//}
+			ui.set_title();
 
-			//else if(bot_game_selected){
-			//	bot_game(ui);
-			//}
+			while(true){
+				if(Input.is_rotate_pressed()){
+					System.out.println("presssed");
+					ui.set_game();
+					human_game(ui);
+					break;
+				}
+			}
 
 			/*
 			 *
 			 * DISPLAY GAME OVER SCREEN HERE
 			 * 
 			 */
+			ui.set_loose();
 		}
 	}
 
