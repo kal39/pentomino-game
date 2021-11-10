@@ -121,7 +121,7 @@ public class HomeScreen {
 		homeFrame.setLayout(null);
 		homeFrame.setLocationRelativeTo(null);
 		homeFrame.setVisible(true);
-		homeFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		homeFrame.setDefaultCloseOperation(homeFrame.EXIT_ON_CLOSE);
 
 		// if button is pressed quit the code
 		QuitGame.addActionListener(new ActionListener() {
