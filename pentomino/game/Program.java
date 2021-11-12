@@ -13,12 +13,6 @@ public class Program {
 
 		while (true) {
 
-			/*
-			 *
-			 * DISPLAY START SCREEN HERE
-			 * 
-			 */
-
 			while (true) {
 				ui.set_title();
 				ui.redraw();
@@ -28,12 +22,7 @@ public class Program {
 					break;
 				}
 			}
-
-			/*
-			 *
-			 * DISPLAY GAME OVER SCREEN HERE
-			 * 
-			 */
+			
 			while (true) {
 				ui.set_loose();
 				ui.redraw();
