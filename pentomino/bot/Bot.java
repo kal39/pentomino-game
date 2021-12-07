@@ -1,116 +1,85 @@
 package pentomino.bot;
 
-import pentomino.utils.*;
+import pentomino.game.Block;
+import pentomino.game.Board;
 
 public class Bot {
-	public int[][] placement;
-	public int[] inputSequence;
-	public double score;
+	double weight1;
+	double weight2;
+	double weight3;
+	double weight4;
+	double weight5;
 
-	public double[] weights;
-
-	private int leftPresses;
-	private int rightPresses;
-	private int rotatePresses;
-
-	public Bot(double[] aWeights) {
-		weights = aWeights.clone();
+	public Bot(double weight1, double weight2, double weight3, double weight4, double weight5) {
+		this.weight1 = weight1;
+		this.weight2 = weight2;
+		this.weight3 = weight3;
+		this.weight4 = weight4;
+		this.weight5 = weight5;
 	}
 
-	public void calculate_inputs(int boardWidth, int pieceWidth) {
-		rotatePresses = inputSequence[1];
+	public double[] simulate_cases(Block gameBlock, Board gameBoard) {
+		Block simulationBlock = gameBlock.clone();
+		int previousYPos;
+		int rotationCount = 0;
+		double[] result = { 999999, 0, 0 };
 
-		leftPresses = boardWidth;
-		rightPresses = inputSequence[0];
-	}
+		// for every rotation
+		for (int i = 0; i < 4; i++) {
 
-	public int[][] get_placement() {
-		return placement.clone();
-	}
+			previousYPos = simulationBlock.get_yPos();
+			simulationBlock.set_xPos(0);
 
-	public void print_placement() {
-		for (int i = 0; i < placement.length; i++) {
-			for (int j = 0; j < placement[0].length; j++) {
-				System.out.print(placement[i][j] == 0 ? "░░" : "██");
+			// for every possible X-Position
+			while (simulationBlock.get_xPos() != 6 - simulationBlock.get_width()) {
+				Board simulationBoard = gameBoard.clone();
+
+				// simulate the block falling down entirely
+				while (simulationBoard.bottom_check(simulationBlock)
+						&& simulationBoard.collision_check(simulationBlock)) {
+					simulationBlock.set_yPos(simulationBlock.get_yPos() + 1);
+				}
+
+				simulationBoard.update_board(simulationBlock);
+
+				double subtraction = simulationBoard.clear_lines();
+
+				int[][] test = simulationBoard.get_board();
+
+				// calculates score and sets it as the new minimum score if smaller than current
+				// score
+				double score = Score.calculate_Score(test, weight2, weight3, weight4, weight5) + weight1 * subtraction;
+				if (score < result[0]) {
+					result[0] = score;
+					result[1] = rotationCount;
+					result[2] = simulationBlock.get_xPos();
+				}
+				simulationBlock.set_yPos(previousYPos);
+				simulationBlock.set_xPos(simulationBlock.get_xPos() + 1);
 			}
-			System.out.println();
+			simulationBlock.rotate(gameBoard);
+			rotationCount++;
 		}
-		System.out.println("Score: " + score + "\n");
+		return result;
 	}
 
-	public boolean is_left_pressed() {
-		if (leftPresses > 0) {
-			leftPresses--;
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public boolean is_right_pressed() {
-		if (leftPresses == 0 && rightPresses > 0) {
-			rightPresses--;
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public boolean is_rotate_pressed() {
-		if (rotatePresses > 0) {
-			rotatePresses--;
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public boolean is_drop_pressed() {
-		if (leftPresses == 0 && rightPresses == 0 && rotatePresses == 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	protected static int[][] drop_piece(int[][] board, int[][] piece, int col) {
-		int originalCount = count_filled_cells(board) + count_filled_cells(piece);
-		int i = 1;
-		while (true) {
-			if (i + piece.length > board.length)
-				break;
-			int[][] newBoard = add_piece_to_board(board, piece, col, i);
-			if (originalCount != count_filled_cells(newBoard))
-				break;
-			i++;
+	public void move_into_position(Block gameBlock, Board gameBoard, double[] placement) {
+		for (int i = 0; i < placement[1]; i++) {
+			gameBlock.rotate(gameBoard);
 		}
 
-		// return remove_filled_lines(add_piece_to_board(board, piece, col, i - 1));
-		return add_piece_to_board(board, piece, col, i - 1);
-	}
+		if (placement[2] < gameBlock.get_xPos()) {
+			int offset = (int) (gameBlock.get_xPos() - placement[2]);
 
-	private static int[][] add_piece_to_board(int board[][], int[][] piece, int x, int y) {
-		int[][] newBoard = ArrayUtils.copy(board);
-		for (int i = 0; i < piece.length; i++) {
-			for (int j = 0; j < piece[0].length; j++) {
-				if (piece[i][j] != 0)
-					newBoard[i + y][j + x] = piece[i][j];
+			for (int i = 0; i < offset; i++) {
+				gameBlock.move_left(gameBoard);
+			}
+		} else if (placement[2] > gameBlock.get_xPos()) {
+			int offset = (int) (placement[2] - gameBlock.get_xPos());
+
+			for (int i = 0; i < offset; i++) {
+				gameBlock.move_right(gameBoard);
 			}
 		}
-
-		return newBoard;
-	}
-
-	private static int count_filled_cells(int board[][]) {
-		int count = 0;
-
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[0].length; j++) {
-				if (board[i][j] != 0)
-					count++;
-			}
-		}
-
-		return count;
 	}
 }

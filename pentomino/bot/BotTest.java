@@ -1,14 +1,15 @@
 package pentomino.bot;
 
+import pentomino.game.*;
 import pentomino.utils.ArrayUtils;
 
 public class BotTest {
 	public static void main(String[] args) {
 		double[] weights = new double[] { -0.9, -0.05, -0.38, 0.26, 0.73 };
-		int times = 1000;
+		int times = 10;
 
 		long t1 = System.nanoTime();
-		double score = test_times(2, times, weights);
+		double score = test_times(1, times, weights);
 		long t2 = System.nanoTime();
 
 		System.out.println("Average score: " + score + ", execution time: " + ((t2 - t1) / times / 1000) + "[μs]");
@@ -29,116 +30,76 @@ public class BotTest {
 					break;
 			}
 
-			System.out.println(score);
+			// System.out.println(score);
 			total += score;
 			if (score > max)
 				max = score;
 		}
 
-		System.out.println("Average: " + total / times + ", max: " + max);
+		// System.out.println("Average: " + total / times + ", max: " + max);
 
 		return total / times;
 	}
 
 	public static int test_bot1(double[] weights) {
-		Bot1 bot = new Bot1(weights);
-		int[][] board = new int[20][5];
-		int clearedLines = 0;
+		Bot bot = new Bot(weights[0], weights[1], weights[2], weights[3], weights[4]);
+		// System.out.println(weights[0] + ", " + weights[1] + ", " + weights[2] + ", "
+		// + weights[3] + ", " + weights[4]);
+		Board board = new Board();
+		Block nextBlock = new Block();
+		int score = 0;
 
-		while (!board_filled(board)) {
-			bot.optimal_move(board, new_piece());
-			board = bot.get_placement();
-			clearedLines += count_filled_lines(board);
-			board = remove_filled_lines(board);
+		while (board.game_is_running()) {
+			Block block = nextBlock;
+			nextBlock = new Block();
+			boolean toBmoved = true;
+			double[] optimumPlacement = bot.simulate_cases(block, board);
+			boolean canFall = true;
+
+			while (canFall) {
+				if (block.get_yPos() > 2 && toBmoved) {
+					bot.move_into_position(block, board, optimumPlacement);
+					toBmoved = false;
+				}
+
+				canFall = block.move_down(board);
+				score += board.detect_line();
+			}
+
+			board.update_board(block);
+			block = null;
 		}
-		return clearedLines;
+
+		return score;
 	}
 
 	public static int test_bot2(double[] weights) {
-		Bot2 bot = new Bot2(weights);
-		int[][] board = new int[20][5];
-		int clearedLines = 0;
+		Bot2 bot = new Bot2(weights[0], weights[1], weights[2], weights[3], weights[4]);
+		Board board = new Board();
+		Block nextBlock = new Block();
+		int score = 0;
 
-		int[][] nextPiece = new_piece();
+		while (board.game_is_running()) {
+			Block block = nextBlock;
+			nextBlock = new Block();
+			boolean toBmoved = true;
+			double[] optimumPlacement = bot.simulate_cases2(block, nextBlock, board);
+			boolean canFall = true;
 
-		while (!board_filled(board)) {
-			int[][] currentPiece = nextPiece.clone();
-			nextPiece = new_piece();
-			bot.optimal_move(board, currentPiece, nextPiece);
-			board = bot.get_placement();
-			clearedLines += count_filled_lines(board);
-			board = remove_filled_lines(board);
-		}
+			while (canFall) {
+				if (block.get_yPos() > 2 && toBmoved) {
+					bot.move_into_position(block, board, optimumPlacement);
+					toBmoved = false;
+				}
 
-		return clearedLines;
-	}
-
-	private static boolean board_filled(int[][] board) {
-		for (int i = 0; i < board[0].length; i++) {
-			if (board[5][i] != 0)
-				return true;
-		}
-
-		return false;
-	}
-
-	private static int[][] new_piece() {
-		return new pentomino.game.Block().get_shape();
-	}
-
-	private static int count_filled_lines(int[][] board) {
-		int clearedLines = 0;
-
-		for (int i = 0; i < board.length; i++) {
-			int filled = 0;
-			for (int j = 0; j < board[0].length; j++) {
-				if (board[i][j] != 0)
-					filled++;
+				canFall = block.move_down(board);
+				score += board.detect_line();
 			}
 
-			if (filled == board[0].length)
-				clearedLines++;
+			board.update_board(block);
+			block = null;
 		}
 
-		return clearedLines;
-	}
-
-	private static int[][] remove_filled_lines(int[][] board) {
-		for (int i = 0; i < board.length; i++) {
-			int filled = 0;
-			for (int j = 0; j < board[0].length; j++) {
-				if (board[i][j] != 0)
-					filled++;
-			}
-
-			if (filled == board[0].length)
-				board = remove_line(board, i);
-
-		}
-
-		return board;
-	}
-
-	private static int[][] remove_line(int[][] board, int line) {
-		int[][] newBoard = ArrayUtils.copy(board);
-
-		newBoard[0] = new int[5];
-		for (int i = 0; i < line; i++) {
-			for (int j = 0; j < board[0].length; j++) {
-				newBoard[i + 1][j] = board[i][j];
-			}
-		}
-
-		return newBoard;
-	}
-
-	public static void print_board(int[][] board) {
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[0].length; j++) {
-				System.out.print(board[i][j] == 0 ? "░░" : "██");
-			}
-			System.out.println();
-		}
-		System.out.println();
+		return score;
 	}
 }

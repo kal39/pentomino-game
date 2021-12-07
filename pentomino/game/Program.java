@@ -1,10 +1,7 @@
 package pentomino.game;
 
-import pentomino.ui.Input;
-import pentomino.ui.Sound;
-import pentomino.ui.UI;
-import pentomino.bot.Bot1;
-import pentomino.bot.Bot2;
+import pentomino.ui.*;
+import pentomino.bot.*;
 import pentomino.leaderboard.LeaderBoard;
 
 public class Program {
@@ -38,7 +35,7 @@ public class Program {
 				}
 				if (Input.is_right_pressed()) {
 					ui.set_game();
-					bot2_game(ui);
+					// bot2_game(ui);
 					break;
 				}
 				if (Input.is_fall_pressed()) {
@@ -139,8 +136,8 @@ public class Program {
 	}
 
 	private static void bot_game(UI ui) {
-		Bot1 bot = new Bot1(new double[] { -0.90, -0.05, -0.38, 0.26, 0.73 });
-
+		// Bot bot = new Bot(-0.90, -0.05, -0.38, 0.26, 0.73);
+		Bot bot = new Bot(1, 1, 1, 1, 1);
 		Board board = new Board();
 		Block nextBlock = new Block();
 		int score = 0;
@@ -151,8 +148,11 @@ public class Program {
 			// create a new pentomino block object and display it
 			Block block = nextBlock;
 			nextBlock = new Block();
+			boolean toBmoved = true;
 
-			bot.optimal_move(board.get_board(), block.shape);
+			// simulate all possible placements of the block and return the one with the
+			// best score
+			double[] optimumPlacement = bot.simulate_cases(block, board);
 
 			long prevTime = 0;
 			boolean canFall = true;
@@ -161,23 +161,14 @@ public class Program {
 			while (canFall) {
 				long currTime = System.currentTimeMillis();
 
-				// Process keyboard input
-				if (!drop) {
-					if (bot.is_left_pressed()) {
-						block.move_left(board);
-					}
-					if (bot.is_right_pressed()) {
-						block.move_right(board);
-					}
-					if (bot.is_drop_pressed()) {
-						drop = true;
-					}
-					if (bot.is_rotate_pressed()) {
-						block.rotate(board);
-					}
+				if (block.get_yPos() > 2 && toBmoved) {
+					// move the block into the right position and rotation
+					bot.move_into_position(block, board, optimumPlacement);
+					ui.set_board(board.get_state(block));
+					toBmoved = false;
 				}
 
-				if (currTime - prevTime > (drop ? BOT_DROP_SPEED : GAME_SPEED)) {
+				if (currTime - prevTime > (drop ? BOT_DROP_SPEED / 100 : BOT_DROP_SPEED)) {
 					// move the block down by one row
 					canFall = block.move_down(board);
 
@@ -193,9 +184,8 @@ public class Program {
 				score += board.detect_line();
 
 				ui.set_board(board.get_state(block));
-				ui.set_next_piece(nextBlock.id);
+				ui.set_next_piece(nextBlock.get_id());
 				ui.set_score(score);
-				ui.set_leader_board(leaderBoard);
 				ui.redraw();
 
 			}
@@ -204,13 +194,11 @@ public class Program {
 			board.update_board(block);
 			block = null;
 		}
-
-		leaderBoard.add_score(score);
 	}
 
-	private static void bot2_game(UI ui) {
-		Bot2 bot = new Bot2(new double[] { -0.94, -0.30, 0.52, 0.32, -0.11 });
-
+	private static void bot_game2(UI ui) {
+		// Bot bot = new Bot(-0.90, -0.05, -0.38, 0.26, 0.73);
+		Bot2 bot = new Bot2(1, 1, 1, 1, 1);
 		Board board = new Board();
 		Block nextBlock = new Block();
 		int score = 0;
@@ -221,8 +209,11 @@ public class Program {
 			// create a new pentomino block object and display it
 			Block block = nextBlock;
 			nextBlock = new Block();
+			boolean toBmoved = true;
 
-			bot.optimal_move(board.get_board(), block.shape, nextBlock.shape);
+			// simulate all possible placements of the block and return the one with the
+			// best score
+			double[] optimumPlacement = bot.simulate_cases2(block, nextBlock, board);
 
 			long prevTime = 0;
 			boolean canFall = true;
@@ -231,23 +222,14 @@ public class Program {
 			while (canFall) {
 				long currTime = System.currentTimeMillis();
 
-				// Process keyboard input
-				if (!drop) {
-					if (bot.is_left_pressed()) {
-						block.move_left(board);
-					}
-					if (bot.is_right_pressed()) {
-						block.move_right(board);
-					}
-					if (bot.is_drop_pressed()) {
-						drop = true;
-					}
-					if (bot.is_rotate_pressed()) {
-						block.rotate(board);
-					}
+				if (block.get_yPos() > 2 && toBmoved) {
+					// move the block into the right position and rotation
+					bot.move_into_position(block, board, optimumPlacement);
+					ui.set_board(board.get_state(block));
+					toBmoved = false;
 				}
 
-				if (currTime - prevTime > (drop ? BOT_DROP_SPEED : GAME_SPEED)) {
+				if (currTime - prevTime > (drop ? BOT_DROP_SPEED / 100 : BOT_DROP_SPEED)) {
 					// move the block down by one row
 					canFall = block.move_down(board);
 
@@ -263,9 +245,8 @@ public class Program {
 				score += board.detect_line();
 
 				ui.set_board(board.get_state(block));
-				ui.set_next_piece(nextBlock.id);
+				ui.set_next_piece(nextBlock.get_id());
 				ui.set_score(score);
-				ui.set_leader_board(leaderBoard);
 				ui.redraw();
 
 			}
@@ -274,8 +255,6 @@ public class Program {
 			board.update_board(block);
 			block = null;
 		}
-
-		leaderBoard.add_score(score);
 	}
 
 }

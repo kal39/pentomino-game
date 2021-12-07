@@ -1,86 +1,79 @@
 package pentomino.bot;
 
 public class Score {
-	public static double calculate_score(int[][] board, double[] weights) {
-		return weights[0] * count_cleared_lines(board) + weights[1] * measure_height(board)
-				+ weights[2] * measure_total_height(board) + weights[3] * measure_bumpiness(board)
-				+ weights[4] * count_holes(board);
+	public static double calculate_Score(int[][] Matrix, double weight2, double weight3, double weight4,
+			double weight5) {
+		double newscore = 0;
+		newscore += (weight2 * height(Matrix));
+		newscore += (weight3 * totalHeight(Matrix));
+		newscore += (weight4 * bumpyness(Matrix));
+		newscore += (weight5 * Holes_Counter_1(Matrix));
+
+		return newscore;
 	}
 
-	private static int count_cleared_lines(int[][] board) {
-		int clearedLines = 0;
-
-		for (int i = 0; i < board.length; i++) {
-			int count = 0;
-			for (int j = 0; j < board[0].length; j++) {
-				if (board[i][j] != 0)
-					count++;
-			}
-
-			if (count == board[0].length)
-				clearedLines++;
-		}
-
-		return clearedLines;
-	}
-
-	private static int measure_height(int[][] board) {
-		int maxHeight = 0;
-		for (int i = 0; i < board[0].length; i++) {
-			int colHeight = column_height(board, i);
-			if (colHeight > maxHeight)
-				maxHeight = colHeight;
-		}
-
-		return maxHeight;
-	}
-
-	private static int measure_total_height(int[][] board) {
-		int totalHeight = 0;
-		for (int i = 0; i < board[0].length; i++) {
-			totalHeight += column_height(board, i);
-		}
-
-		return totalHeight;
-	}
-
-	private static int measure_bumpiness(int[][] board) {
-		int bumpiness = 0;
-		int prevHeight = column_height(board, 0);
-		for (int i = 1; i < board[0].length; i++) {
-			int currHeight = column_height(board, i);
-			bumpiness += Math.abs(prevHeight - currHeight);
-			prevHeight = currHeight;
-		}
-
-		return bumpiness;
-	}
-
-	private static int count_holes(int[][] board) {
-		int holes = 0;
-
-		for (int i = 1; i < board.length; i++) {
-			for (int j = 0; j < board[0].length; j++) {
-				if (board[i][j] == 0) {
-					for (int k = i - 1; k > 0; k--) {
-						if (board[k][j] != 0) {
-							holes++;
-							break;
-						}
-					}
+	private static double totalHeight(int[][] Matrix) {
+		double h = 0;
+		for (int j = 0; j < Matrix[0].length; j++) {
+			for (int i = 0; i < Matrix.length; i++) {
+				if (Matrix[i][j] != 0) {
+					h += (Matrix.length - i);
+					break;
 				}
 			}
 		}
-
-		return holes;
+		return h;
 	}
 
-	private static int column_height(int[][] board, int column) {
-		for (int i = 0; i < board.length; i++) {
-			if (board[i][column] != 0)
-				return board.length - i;
+	private static double bumpyness(int[][] Matrix) {
+		double bumpy = 0;
+		int[] arr = new int[Matrix[0].length];
+		for (int j = 0; j < Matrix[0].length; j++) {
+			for (int i = 0; i < Matrix.length; i++) {
+				if (Matrix[i][j] != 0) {
+					arr[j] = (Matrix.length - i);
+					break;
+				}
+			}
+		}
+		for (int k = 0; k < arr.length - 1; k++) {
+			int a = arr[k] - arr[k + 1];
+			bumpy += Math.abs(a);
 		}
 
+		return bumpy;
+	}
+
+	private static double height(int[][] M) {
+		for (int r = 0; r < M.length; r++) {
+			for (int c = 0; c < M[0].length; c++) {
+				if (M[r][c] != 0)
+					return (M.length - r);
+			}
+		}
 		return 0;
 	}
+
+	private static double Holes_Counter_1(int[][] Matrix) {
+		double points = 0;
+		for (int j = 0; j < Matrix[0].length; j++) {
+			for (int i = 0; i < Matrix.length; i++) {
+				if (Matrix[i][j] != 0) {
+					points += Search_For_Holes_1(Matrix, i, j);
+					break;
+				}
+			}
+		}
+		return points;
+	}
+
+	private static double Search_For_Holes_1(int[][] Matrix, int i, int j) {
+		double hole = 0;
+		for (int k = i + 1; k < Matrix.length; k++) {
+			if (Matrix[k][j] == 0)
+				hole++;
+		}
+		return hole;
+	}
+
 }

@@ -1,12 +1,20 @@
 package pentomino.game;
 
-import pentomino.utils.ArrayUtils;
+import pentomino.utils.*;
 
 public class Board {
 	private int board[][];
 
 	public Board() {
 		board = new int[20][5];
+	}
+
+	public Board clone() {
+		Board cloned = new Board();
+		int[][] grid = ArrayUtils.copy(board);
+		cloned.set_board(grid);
+
+		return cloned;
 	}
 
 	public int[][] get_board() {
@@ -128,4 +136,30 @@ public class Board {
 			temp++;
 		}
 	}
+
+	private void set_board(int[][] matrix) {
+		this.board = matrix;
+	}
+
+	public double clear_lines() {
+		int[][] blank = new int[1][5];
+		int[] rows2delete = new int[0];
+		for (int r = 0; r < board.length; r++) {
+			boolean check = true;
+			for (int c = 0; c < board[0].length; c++) {
+				if (board[r][c] == 0) {
+					check = false;
+				}
+			}
+			if (check) {
+				rows2delete = ArrayUtils.add_element(rows2delete, r);
+			}
+		}
+		board = ArrayUtils.remove_row(board, rows2delete);
+		for (int i = 0; i < rows2delete.length; i++) {
+			board = ArrayUtils.add(blank, board);
+		}
+		return (double) rows2delete.length;
+	}
+
 }

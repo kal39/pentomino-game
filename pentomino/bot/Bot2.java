@@ -1,47 +1,59 @@
 package pentomino.bot;
 
+import pentomino.game.Block;
+import pentomino.game.Board;
+
 public class Bot2 extends Bot {
-	public Bot2(double[] aWeights) {
-		super(aWeights);
+	public Bot2(double weight1, double weight2, double weight3, double weight4,
+			double weight5) {
+		super(weight1, weight2, weight3, weight4, weight5);
 	}
 
-	public void optimal_move(int[][] board, int[][] piece, int[][] nextPiece) {
-		// int[][][] placements = PlacementGenerator.generate_all_placements(board,
-		// piece);
-		// int[][] inputSequences =
-		// PlacementGenerator.generate_all_input_sequences(board, piece);
-		// double[] scores = new double[placements.length];
+	public double[] simulate_cases2(Block gameBlock, Block nextBlock, Board gameBoard) {
+		Block simulationBlockOne = gameBlock.clone();
+		Block simulationBlockTwo = nextBlock.clone();
+		int previousYPos;
+		int rotationCount = 0;
+		double[] result = { 999999, 0, 0 };
 
-		// for (int i = 0; i < placements.length; i++) {
-		// int[][][] placements2 =
-		// PlacementGenerator.generate_all_placements(placements[i], nextPiece);
-		// scores[i] = Score.calculate_score(placements2[0], weights);
+		// for every rotation
+		for (int i = 0; i < 4; i++) {
 
-		// for (int j = 1; j < placements2.length; j++) {
-		// double score = Score.calculate_score(placements2[j], weights);
-		// if (score < scores[i])
-		// scores[i] = score;
-		// }
-		// }
+			previousYPos = simulationBlockOne.get_yPos();
+			simulationBlockOne.set_xPos(0);
 
-		// int minIdx = min_idx(scores);
-		// placement = placements[minIdx];
-		// inputSequence = inputSequences[minIdx];
-		// score = scores[minIdx];
-		// calculate_inputs(board[0].length, piece[0].length);
-	}
+			// for every possible X-Position
+			while (simulationBlockOne.get_xPos() != 6 - simulationBlockOne.get_width()) {
 
-	private int min_idx(double[] values) {
-		double min = values[0];
-		int minIdx = 0;
+				// simulate the block falling down entirely
+				while (gameBoard.bottom_check(simulationBlockOne) &&
+						gameBoard.collision_check(simulationBlockOne)) {
+					simulationBlockOne.set_yPos(simulationBlockOne.get_yPos() + 1);
+				}
+				Board simulationBoard = gameBoard.clone();
+				simulationBoard.update_board(simulationBlockOne);
+				double substraction = simulationBoard.clear_lines();
 
-		for (int i = 1; i < values.length; i++) {
-			if (values[i] < min) {
-				min = values[i];
-				minIdx = i;
+				// Get the best placement for second block
+				double[] tempResult = super.simulate_cases(simulationBlockTwo,
+						simulationBoard);
+				double score = tempResult[0] - substraction;
+
+				// If the simulated score is lower than the current one save the current
+				// rotation and X-Pos of the first block
+				if (score < result[0]) {
+					result[0] = score;
+					result[1] = rotationCount;
+					result[2] = simulationBlockOne.get_xPos();
+				}
+
+				simulationBlockOne.set_yPos(previousYPos);
+				simulationBlockOne.set_xPos(simulationBlockOne.get_xPos() + 1);
 			}
+			simulationBlockOne.rotate(gameBoard);
+			rotationCount++;
 		}
-
-		return minIdx;
+		return result;
 	}
+
 }
