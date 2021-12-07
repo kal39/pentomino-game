@@ -1,7 +1,9 @@
 package pentomino.game;
 
 import java.util.Random;
-import pentomino.Representations;
+
+import pentomino.utils.ArrayUtils;
+import pentomino.utils.Representations;
 
 public class Block {
 	int[][] shape;
@@ -13,7 +15,7 @@ public class Block {
 	public Block() {
 		Random rand = new Random();
 
-		id = rand.nextInt(12) + 1;
+		id = rand.nextInt(18) + 1;
 		shape = Representations.get_shape(id);
 
 		int rotation = rand.nextInt(4);

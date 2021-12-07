@@ -1,5 +1,7 @@
 package pentomino.game;
 
+import pentomino.utils.ArrayUtils;
+
 public class Board {
 	private int board[][];
 

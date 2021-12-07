@@ -1,13 +1,13 @@
-package pentomino.game;
+package pentomino.utils;
 
 import java.util.Arrays;
 
 public class ArrayUtils {
 
-	public static int[][] copy(int[][] in){
+	public static int[][] copy(int[][] in) {
 		int[][] returnMatrix = new int[in.length][in[0].length];
-		for(int r = 0; r < returnMatrix.length; r++){
-			for(int c = 0; c < returnMatrix[0].length; c++){
+		for (int r = 0; r < returnMatrix.length; r++) {
+			for (int c = 0; c < returnMatrix[0].length; c++) {
 				returnMatrix[r][c] = in[r][c];
 			}
 		}
@@ -118,24 +118,35 @@ public class ArrayUtils {
 		return newArray;
 	}
 
-	public static int[][] add_element(int[][] array, int[] row) {
+	public static int[][] add_element(int[][] array, int[] element) {
 		int[][] newArray = new int[array.length + 1][];
 
 		for (int i = 0; i < array.length; i++) {
 			newArray[i] = array[i];
 		}
-		newArray[newArray.length - 1] = row;
+		newArray[newArray.length - 1] = element;
 
 		return newArray;
 	}
 
-	public static int[][][] add_element(int[][][] array, int[][] layer) {
+	public static int[][][] add_element(int[][][] array, int[][] element) {
 		int[][][] newArray = new int[array.length + 1][][];
 
 		for (int i = 0; i < array.length; i++) {
 			newArray[i] = array[i];
 		}
-		newArray[newArray.length - 1] = layer;
+		newArray[newArray.length - 1] = element;
+
+		return newArray;
+	}
+
+	public static int[][][][] add_element(int[][][][] array, int[][][] element) {
+		int[][][][] newArray = new int[array.length + 1][][][];
+
+		for (int i = 0; i < array.length; i++) {
+			newArray[i] = array[i];
+		}
+		newArray[newArray.length - 1] = element;
 
 		return newArray;
 	}

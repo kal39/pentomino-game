@@ -1,5 +1,6 @@
 package pentomino.ui;
 
+import pentomino.leaderboard.LeaderBoard;
 import javax.swing.JFrame;
 
 public class UI {
@@ -95,14 +96,14 @@ public class UI {
 	 * @param newHighScore the new highscore
 	 */
 
-	public void set_high_score(int newHighScore) {
-		gui.set_high_score(newHighScore);
+	public void set_leader_board(LeaderBoard leaderBoard) {
+		gui.set_leader_board(leaderBoard);
 	}
 
 	/**
 	 * Set the next pentomino to be displayed
 	 * 
-	 * @param newNextPiece the id of the pentomino (1 ~ 12)
+	 * @param newNextPiece the id of the pentomino (1 ~ 18)
 	 */
 
 	public void set_next_piece(int newNextPiece) {

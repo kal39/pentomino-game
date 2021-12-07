@@ -1,8 +1,8 @@
 package pentomino.ui;
 
 import java.awt.*;
-
-import pentomino.Representations;
+import pentomino.leaderboard.LeaderBoard;
+import pentomino.utils.Representations;
 
 public class GUI extends Canvas {
 	int cellSize;
@@ -11,10 +11,11 @@ public class GUI extends Canvas {
 
 	int[][] board = new int[15][5];
 	int score;
-	int highScore;
 	int nextPiece;
 
 	int mode = 0;
+
+	LeaderBoard leaderBoard = new LeaderBoard();
 
 	public void set_board(int[][] newBoard) {
 		board = copy_board(newBoard);
@@ -28,8 +29,8 @@ public class GUI extends Canvas {
 		score = newScore;
 	}
 
-	public void set_high_score(int newHighScore) {
-		highScore = newHighScore;
+	public void set_leader_board(LeaderBoard newLeaderBoard) {
+		leaderBoard = newLeaderBoard;
 	}
 
 	public void set_next_piece(int newNextPiece) {
@@ -53,19 +54,19 @@ public class GUI extends Canvas {
 		Graphics g = buffer.getGraphics();
 
 		switch (mode) {
-		case 0:
-			draw_title(g);
-			break;
-		case 1:
-			draw_background(g);
-			draw_border(g);
-			draw_board(g);
-			draw_info(g);
-			break;
+			case 0:
+				draw_title(g);
+				break;
+			case 1:
+				draw_background(g);
+				draw_border(g);
+				draw_board(g);
+				draw_info(g);
+				break;
 
-		case 2:
-			draw_loose(g);
-			break;
+			case 2:
+				draw_loose(g);
+				break;
 		}
 
 		G.drawImage(buffer, 0, 0, null);
@@ -138,11 +139,17 @@ public class GUI extends Canvas {
 		g.setFont(optionsFont);
 		m = g.getFontMetrics(optionsFont);
 
-		String options1 = "Press [UP] to play again";
-		g.drawString(options1, centerX - m.stringWidth(options1) / 2, centerY);
+		String highScoreTitle = "High Scores";
+		g.drawString(highScoreTitle, centerX - m.stringWidth(highScoreTitle), centerY - centerY / 4);
 
-		String options2 = "Press [DOWN] to show leaderboard";
-		g.drawString(options2, centerX - m.stringWidth(options2) / 2, centerY + fontSize * 2);
+		for (int i = 0; i < 5; i++) {
+			String highScoreString = "[" + (i + 1) + "]: " + leaderBoard.get_score(i);
+			g.drawString(highScoreString, centerX - m.stringWidth(highScoreTitle),
+					centerY - centerY / 4 + (i + 1) * 40);
+		}
+
+		String options1 = "Press [UP] to play again";
+		g.drawString(options1, centerX - m.stringWidth(options1) / 2, centerY + centerY / 2);
 
 	}
 
@@ -185,7 +192,7 @@ public class GUI extends Canvas {
 
 		g.drawString("Highscore:", xOff, yOff);
 		yOff += fontSize + textPadding;
-		g.drawString(String.valueOf(highScore), xOff, yOff);
+		g.drawString(String.valueOf(leaderBoard.get_score(0)), xOff, yOff);
 		yOff += fontSize + textPadding;
 		g.drawString("------------------", xOff, yOff);
 		yOff += fontSize + textPadding;
@@ -217,33 +224,46 @@ public class GUI extends Canvas {
 
 	private Color get_pentomino_color(int pentomino) {
 		switch (pentomino) {
-		case 1:
-			return Color.red;
-		case 2:
-			return Color.green;
-		case 3:
-			return Color.blue;
-		case 4:
-			return Color.yellow;
-		case 5:
-			return Color.pink;
-		case 6:
-			return Color.cyan;
-		case 7:
-			return Color.magenta;
-		case 8:
-			return Color.orange;
-		case 9:
-			return new Color(100, 0, 255);
-		case 10:
-			return new Color(200, 200, 200);
-		case 11:
-			return new Color(210, 255, 0);
-		case 12:
-			return new Color(0, 170, 255);
-		default:
-			return Color.gray; // the border
+			case 1:
+				return new Color(128, 0, 0);
+			case 2:
+				return new Color(170, 110, 40);
+			case 3:
+				return new Color(128, 128, 0);
+			case 4:
+				return new Color(0, 128, 128);
+			case 5:
+				return new Color(0, 0, 128);
+			case 6:
+				return new Color(230, 25, 75);
+			case 7:
+				return new Color(245, 130, 48);
+			case 8:
+				return new Color(255, 225, 25);
+			case 9:
+				return new Color(210, 245, 60);
+			case 10:
+				return new Color(60, 180, 75);
+			case 11:
+				return new Color(70, 240, 240);
+			case 12:
+				return new Color(0, 130, 200);
+			case 13:
+				return new Color(145, 30, 180);
+			case 14:
+				return new Color(240, 50, 230);
+			case 15:
+				return new Color(250, 190, 212);
+			case 16:
+				return new Color(255, 215, 180);
+			case 17:
+				return new Color(220, 190, 255);
+			case 18:
+				return new Color(170, 255, 195);
+			default:
+				return new Color(128, 128, 128); // the border
 		}
+
 	}
 
 	private void draw_3d_square(Graphics g, int x, int y, int size, Color color) {
