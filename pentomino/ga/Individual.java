@@ -6,7 +6,7 @@ import java.text.DecimalFormat;
 import java.util.Random;
 
 public class Individual implements Comparable<Individual> {
-	final static int botType = 2;
+	final static int botType = 1;
 
 	private static final DecimalFormat df = new DecimalFormat("0.00");
 
