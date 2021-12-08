@@ -4,18 +4,10 @@ import pentomino.game.Block;
 import pentomino.game.Board;
 
 public class Bot {
-	double weight1;
-	double weight2;
-	double weight3;
-	double weight4;
-	double weight5;
+	double[] weights;
 
-	public Bot(double weight1, double weight2, double weight3, double weight4, double weight5) {
-		this.weight1 = weight1;
-		this.weight2 = weight2;
-		this.weight3 = weight3;
-		this.weight4 = weight4;
-		this.weight5 = weight5;
+	public Bot(double[] weights) {
+		this.weights = weights.clone();
 	}
 
 	public double[] simulate_cases(Block gameBlock, Board gameBoard) {
@@ -48,7 +40,7 @@ public class Bot {
 
 				// calculates score and sets it as the new minimum score if smaller than current
 				// score
-				double score = Score.calculate_Score(test, weight2, weight3, weight4, weight5) + weight1 * subtraction;
+				double score = Score.calculate_Score(test, weights) + weights[0] * subtraction;
 				if (score < result[0]) {
 					result[0] = score;
 					result[1] = rotationCount;

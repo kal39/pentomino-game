@@ -1,15 +1,9 @@
 package pentomino.bot;
 
 public class Score {
-	public static double calculate_Score(int[][] Matrix, double weight2, double weight3, double weight4,
-			double weight5) {
-		double newscore = 0;
-		newscore += (weight2 * height(Matrix));
-		newscore += (weight3 * totalHeight(Matrix));
-		newscore += (weight4 * bumpyness(Matrix));
-		newscore += (weight5 * Holes_Counter_1(Matrix));
-
-		return newscore;
+	public static double calculate_Score(int[][] Matrix, double[] weights) {
+		return weights[1] * height(Matrix) + weights[2] * totalHeight(Matrix) + weights[3] * bumpyness(Matrix)
+				+ weights[4] * Holes_Counter_1(Matrix);
 	}
 
 	private static double totalHeight(int[][] Matrix) {

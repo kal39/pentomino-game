@@ -1,7 +1,6 @@
 package pentomino.bot;
 
 import pentomino.game.*;
-import pentomino.utils.ArrayUtils;
 
 public class BotTest {
 	public static void main(String[] args) {
@@ -42,7 +41,7 @@ public class BotTest {
 	}
 
 	public static int test_bot1(double[] weights) {
-		Bot bot = new Bot(weights[0], weights[1], weights[2], weights[3], weights[4]);
+		Bot bot = new Bot(weights);
 		// System.out.println(weights[0] + ", " + weights[1] + ", " + weights[2] + ", "
 		// + weights[3] + ", " + weights[4]);
 		Board board = new Board();
@@ -74,7 +73,7 @@ public class BotTest {
 	}
 
 	public static int test_bot2(double[] weights) {
-		Bot2 bot = new Bot2(weights[0], weights[1], weights[2], weights[3], weights[4]);
+		Bot2 bot = new Bot2(weights);
 		Board board = new Board();
 		Block nextBlock = new Block();
 		int score = 0;

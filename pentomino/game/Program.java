@@ -35,7 +35,7 @@ public class Program {
 				}
 				if (Input.is_right_pressed()) {
 					ui.set_game();
-					// bot2_game(ui);
+					bot_game2(ui);
 					break;
 				}
 				if (Input.is_fall_pressed()) {
@@ -137,7 +137,7 @@ public class Program {
 
 	private static void bot_game(UI ui) {
 		// Bot bot = new Bot(-0.90, -0.05, -0.38, 0.26, 0.73);
-		Bot bot = new Bot(1, 1, 1, 1, 1);
+		Bot bot = new Bot(new double[] { -0.48, -0.60, 0.71, 0.91, 0.65 });
 		Board board = new Board();
 		Block nextBlock = new Block();
 		int score = 0;
@@ -197,8 +197,7 @@ public class Program {
 	}
 
 	private static void bot_game2(UI ui) {
-		// Bot bot = new Bot(-0.90, -0.05, -0.38, 0.26, 0.73);
-		Bot2 bot = new Bot2(1, 1, 1, 1, 1);
+		Bot2 bot = new Bot2(new double[] { 0.52, 0.20, 0.72, 0.15, -0.61 });
 		Board board = new Board();
 		Block nextBlock = new Block();
 		int score = 0;

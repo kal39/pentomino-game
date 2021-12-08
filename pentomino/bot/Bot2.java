@@ -4,9 +4,8 @@ import pentomino.game.Block;
 import pentomino.game.Board;
 
 public class Bot2 extends Bot {
-	public Bot2(double weight1, double weight2, double weight3, double weight4,
-			double weight5) {
-		super(weight1, weight2, weight3, weight4, weight5);
+	public Bot2(double[] weights) {
+		super(weights);
 	}
 
 	public double[] simulate_cases2(Block gameBlock, Block nextBlock, Board gameBoard) {
