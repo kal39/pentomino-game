@@ -35,7 +35,7 @@ public class Program {
 				}
 				if (Input.is_right_pressed()) {
 					ui.set_game();
-					// bot2_game(ui);
+					bot_game2(ui);
 					break;
 				}
 				if (Input.is_fall_pressed()) {
