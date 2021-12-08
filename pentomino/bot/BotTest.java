@@ -42,38 +42,31 @@ public class BotTest {
 
 	public static int test_bot1(double[] weights) {
 		Bot bot = new Bot(weights);
-		// System.out.println(weights[0] + ", " + weights[1] + ", " + weights[2] + ", "
-		// + weights[3] + ", " + weights[4]);
 		Board board = new Board();
 		Block nextBlock = new Block();
 		int score = 0;
 
 		while (board.game_is_running()) {
+
 			Block block = nextBlock;
 			nextBlock = new Block();
-			boolean toBmoved = true;
-			double[] optimumPlacement = bot.simulate_cases(block, board);
-			boolean canFall = true;
 
-			while (canFall) {
-				if (block.get_yPos() > 2 && toBmoved) {
-					bot.move_into_position(block, board, optimumPlacement);
-					toBmoved = false;
-				}
+			double[]optimumPlacement = bot.simulate_cases(block, board);
+			//move the block into the right position and rotation
+			bot.move_into_position(block, board, optimumPlacement);
 
-				canFall = block.move_down(board);
-				score += board.detect_line();
+			while (board.collision_check(block) && block.get_yPos() != 19 - block.get_length()) {
+				block.move_down(board);
 			}
 
 			board.update_board(block);
-			block = null;
+			score += board.detect_line();
 		}
-
 		return score;
 	}
 
 	public static int test_bot2(double[] weights) {
-		Bot2 bot = new Bot2(weights);
+		Bot2 bot2 = new Bot2(weights);
 		Board board = new Board();
 		Block nextBlock = new Block();
 		int score = 0;
@@ -81,24 +74,17 @@ public class BotTest {
 		while (board.game_is_running()) {
 			Block block = nextBlock;
 			nextBlock = new Block();
-			boolean toBmoved = true;
-			double[] optimumPlacement = bot.simulate_cases2(block, nextBlock, board);
-			boolean canFall = true;
+			
+			double[] optimumPlacement = bot2.simulate_cases2(block, nextBlock, board);
+			bot2.move_into_position(block, board, optimumPlacement);
 
-			while (canFall) {
-				if (block.get_yPos() > 2 && toBmoved) {
-					bot.move_into_position(block, board, optimumPlacement);
-					toBmoved = false;
-				}
-
-				canFall = block.move_down(board);
-				score += board.detect_line();
+			while (board.collision_check(block) && block.get_yPos() != 19 - block.get_length()) {
+				block.move_down(board);
 			}
-
+			
 			board.update_board(block);
-			block = null;
+			score += board.detect_line();
 		}
-
 		return score;
 	}
 }
