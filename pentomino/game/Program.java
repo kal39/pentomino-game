@@ -9,7 +9,7 @@ public class Program {
 	final static int GAME_SPEED = 500;
 	final static int DROP_SPEED = 1;
 	final static int FALL_SPEED = 50;
-	final static int BOT_DROP_SPEED = 10;
+	final static int BOT_DROP_SPEED = 25;
 
 	static LeaderBoard leaderBoard = new LeaderBoard();
 
